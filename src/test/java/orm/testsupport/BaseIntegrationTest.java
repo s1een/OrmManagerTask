@@ -1,4 +1,4 @@
-package orm.testuspport;
+package orm.testsupport;
 
 import org.h2.jdbcx.JdbcDataSource;
 import org.jooq.CreateTableColumnStep;
