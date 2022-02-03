@@ -1,0 +1,36 @@
+Feb 03, 2022 10:38:14 AM client.App main
+INFO: [Status] Start of the program.
+Feb 03, 2022 10:38:14 AM manager.OrmManager <init>
+INFO: [Status] Trying to connect to H2.db
+Feb 03, 2022 10:38:14 AM manager.OrmManager runCommand
+INFO: [Status] Connected to Data Base.
+Feb 03, 2022 10:38:14 AM manager.OrmManager runCommand
+INFO: [Executing query] DROP TABLE IF EXISTS Animal; CREATE TABLE Animal(id BIGINT PRIMARY KEY AUTO_INCREMENT, Fullname varchar(250), Age INTEGER);
+Feb 03, 2022 10:38:14 AM manager.OrmManager runCommand
+INFO: [Status] Connected to Data Base.
+Feb 03, 2022 10:38:14 AM manager.OrmManager runCommand
+INFO: [Executing query] DROP TABLE IF EXISTS Zoo; CREATE TABLE Zoo(id_zoo BIGINT PRIMARY KEY AUTO_INCREMENT, address varchar(250));
+Feb 03, 2022 10:38:14 AM manager.OrmManager runCommand
+INFO: [Status] Connected to Data Base.
+Feb 03, 2022 10:38:14 AM manager.OrmManager runCommand
+INFO: [Executing query] DROP TABLE IF EXISTS Person; CREATE TABLE Person(id_person BIGINT PRIMARY KEY AUTO_INCREMENT, firstName varchar(250), dateOfBirth DATE);
+Feb 03, 2022 10:38:14 AM manager.OrmManager save
+INFO: [Executing query] INSERT INTO ANIMAL(FULLNAME,AGE) VALUES ('alex',23);
+Feb 03, 2022 10:38:14 AM manager.OrmManager save
+INFO: [Executing query] INSERT INTO ANIMAL(FULLNAME,AGE) VALUES ('alexey',26);
+Feb 03, 2022 10:38:14 AM manager.OrmManager save
+INFO: [Executing query] INSERT INTO ANIMAL(FULLNAME,AGE) VALUES ('dimon',5);
+Feb 03, 2022 10:38:14 AM manager.OrmManager save
+INFO: [Executing query] INSERT INTO ANIMAL(FULLNAME,AGE) VALUES ('valera',33);
+Feb 03, 2022 10:38:14 AM manager.OrmManager getAll
+INFO: [Executing query] SELECT * FROM ANIMAL;
+Feb 03, 2022 10:38:14 AM manager.OrmManager runCommand
+INFO: [Status] Connected to Data Base.
+Feb 03, 2022 10:38:14 AM manager.OrmManager runCommand
+INFO: [Executing query] DELETE FROM Animal WHERE AGE>30;
+Feb 03, 2022 10:38:14 AM manager.OrmManager delete
+WARNING: Wrong condition format: FULL_AGE>2
+Feb 03, 2022 10:38:14 AM manager.OrmManager getAll
+INFO: [Executing query] SELECT * FROM ANIMAL;
+Feb 03, 2022 10:38:14 AM client.App main
+INFO: [Status] End of the program.
