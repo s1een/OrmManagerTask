@@ -3,11 +3,14 @@ package manager;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public final class ConnectionManager {
     private ConnectionManager() {
     }
 
+    static Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     private static final String USERNAME_KEY = ".username";
     private static final String PASSWORD_KEY = ".password";
     private static final String URL = ".url";
@@ -20,6 +23,7 @@ public final class ConnectionManager {
                     PropertiesUtil.get(key + PASSWORD_KEY)
             );
         } catch (SQLException e) {
+            logger.log(Level.SEVERE, "[Error] " + e.getMessage());
             System.out.println("Failed to connect to database " + e.getMessage());
             throw new RuntimeException(e);
         }
