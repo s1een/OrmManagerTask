@@ -316,11 +316,11 @@ public class OrmManager {
 
     }
 
-    private boolean where(String condition, List<String> fields){
+    public static boolean where(String condition, List<String> fields){
         return checkCondition(condition,fields);
     }
 
-    private boolean checkCondition(String condition, List<String> fields) {
+    private static boolean checkCondition(String condition, List<String> fields) {
         var conditionSymbol = checkConditionSymbol(condition);
         if(conditionSymbol == "-1")
             return false;
@@ -335,7 +335,7 @@ public class OrmManager {
         return false;
     }
 
-    private String checkConditionSymbol(String condition){
+    private static String checkConditionSymbol(String condition){
         String[] symbols = {};
         symbols = new String[]{"=",">",">=","<","<=","<>"," LIKE ", " IN "};
         for (String s : symbols)
