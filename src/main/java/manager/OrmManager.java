@@ -3,6 +3,9 @@ package manager;
 import annotations.Column;
 import annotations.Entity;
 import annotations.Id;
+import dataBaseTypes.DataBase;
+import dataBaseTypes.DataBaseH2Impl;
+import dataBaseTypes.DataBasePostgresImpl;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -20,16 +23,29 @@ public class OrmManager {
     private static String dbKey;
     static Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
+    private static DataBase dataBaseType;
+
     UnaryOperator<String> wrapInQuotes = s -> "'" + s + "'";
 
-    public OrmManager(String database) {
+    private OrmManager(String database) {
         logger.log(Level.INFO,"[Status] Trying to connect to " + database);
+        dataBaseType = getDataBaseType(database.substring(0, database.length() - 3));
         connection = ConnectionManager.open(database);
     }
 
     public static OrmManager get(String key) {
         dbKey = key;
         return new OrmManager(key);
+    }
+
+    private static DataBase getDataBaseType(String key){
+        return switch (key.toLowerCase()) {
+            case "h2" -> new DataBaseH2Impl();
+            case "postgre" -> new DataBasePostgresImpl();
+            default -> {
+                throw new IllegalArgumentException("Unknown type");
+            }
+        };
     }
 
     public void prepareRepositoryFor(Class<?> table) {
@@ -60,39 +76,12 @@ public class OrmManager {
         Annotation[] annotations = field.getDeclaredAnnotations();
         for (Annotation annotation : annotations) {
             if (field.isAnnotationPresent(Id.class)) {
-                stringBuilder.append(createId(field, (Id) annotation));
+                stringBuilder.append(dataBaseType.createId(field, (Id) annotation));
             } else if (field.isAnnotationPresent(Column.class)) {
-                stringBuilder.append(createColumn(field, (Column) annotation));
+                stringBuilder.append(dataBaseType.createColumn(field, (Column) annotation));
             }
         }
         return stringBuilder.toString();
-    }
-
-    private String createId(Field field, Id id) {
-        return (id.value().isEmpty() ? field.getName() : id.value()) + " "
-                + convertIntoSQL(field.getType()) + " PRIMARY KEY AUTO_INCREMENT";
-    }
-
-    private String createColumn(Field field, Column column) {
-        String result = (column.value().isEmpty() ?
-                field.getName() : column.value()) + " " + convertIntoSQL(field.getType());
-        if (column.allowNull()) {
-            result += " NOT NULL";
-        }
-        return result;
-    }
-
-    private String convertIntoSQL(Class<?> clazz) {
-        return switch (clazz.getSimpleName()) {
-            case "Long", "long" -> "BIGINT";
-            case "Integer", "int" -> "INTEGER";
-            case "String" -> "varchar(250)";
-            case "LocalDate" -> "DATE";
-            default -> {
-                logger.log(Level.SEVERE,"[Entity Error] Unknown type");
-                throw new IllegalArgumentException("Unknown type");
-            }
-        };
     }
 
     private static void runCommand(String command) {
